@@ -1,0 +1,197 @@
+{
+	"info": {
+		"_postman_id": "27b507ab-f30e-4dea-b583-18f28cd40d40",
+		"name": "ExpertSoft API - Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46191469",
+		"_collection_link": "https://miguelcanedo-3992885.postman.co/workspace/Miguel-Canedo-'s-Workspace~a7777305-c11e-4e6e-8f97-74b77e0db861/collection/46191469-27b507ab-f30e-4dea-b583-18f28cd40d40?action=share&source=collection_link&creator=46191469"
+	},
+	"item": [
+		{
+			"name": "List all invoices",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/invoices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"invoices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List invoice by Id (5)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/invoices/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"invoices",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create an invoice",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_client\": 1,\n    \"invoice_number\": \"FAC-TEST-001\",\n    \"billing_period\": \"2024-08\",\n    \"billed_amount\": 50000,\n    \"paid_amount\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/invoices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"invoices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update an invoice by id (101)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 101,\n    \"id_client\": 1,\n    \"invoice_number\": \"FAC-TEST-001\",\n    \"billing_period\": \"2024-08\",\n    \"billed_amount\": 50000,\n    \"paid_amount\": 50000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/invoices/101",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"invoices",
+						"101"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete an invoice by id (101)(102)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/invoices/102",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"invoices",
+						"102"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Total paid by a client",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/clients/total-paid",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"clients",
+						"total-paid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get pending invoices",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/invoices/pending",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"invoices",
+						"pending"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Nequi transactions",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get Daviplata transactions",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

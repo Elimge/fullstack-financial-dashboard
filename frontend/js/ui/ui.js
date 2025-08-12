@@ -1,0 +1,71 @@
+// frontend/js/ui/ui.js
+
+/**
+ * This module contains all functions that directly interact with or manipulate the DOM.
+ */
+
+/**
+ * Creates the HTML for a single row in the invoices table.
+ * @param {object} invoice - An invoice object from the API.
+ * @returns {string} The HTML string for the table row.
+ */
+const createInvoiceRow = (invoice) => `
+    <td class="align-middle">${invoice.id_invoice}</td>
+    <td class="align-middle">${invoice.id_client}</td>
+    <td class="align-middle">${invoice.invoice_number}</td>
+    <td class="align-middle">${invoice.billing_period}</td>
+    <td class="align-middle">${invoice.billed_amount}</td>
+    <td class="align-middle">${invoice.paid_amount}</td>
+    <td>
+        <button class="btn btn-warning btn-sm edit-btn" data-invoice-id="${invoice.id_invoice}">Edit</button>
+        <button class="btn btn-danger btn-sm delete-btn" data-invoice-id="${invoice.id_invoice}">Delete</button>
+    </td>
+`;
+
+/**
+ * Renders a list of invoices into the table body.
+ * @param {HTMLElement} tableBody - The tbody element to populate.
+ * @param {Array<object>} invoices - An array of invoice objects.
+ */
+export const renderInvoices = (tableBody, invoices) => {
+    tableBody.innerHTML = ""; // Clear existing content
+    invoices.forEach(invoice => {
+        const row = document.createElement("tr");
+        row.setAttribute("data-row-id", invoice.id_invoice); // Set a data attribute for easy selection
+        row.innerHTML = createInvoiceRow(invoice);
+        tableBody.appendChild(row);
+    });
+};
+
+/**
+ * Updates a single table row with new invoice data.
+ * @param {object} invoice - The updated invoice object (must contain an 'id' property).
+ */
+export const updateTableRow = (invoice) => {
+    const rowToUpdate = document.querySelector(`tr[data-row-id='${invoice.id}']`);
+    if (rowToUpdate) {
+        // We reuse createInvoiceRow to ensure consistency
+        rowToUpdate.innerHTML = createInvoiceRow({ id_invoice: invoice.id, ...invoice });
+    }
+};
+
+/**
+ * Removes a table row from the DOM.
+ * @param {HTMLElement} element - An element within the row to be removed (e.g., the delete button).
+ */
+export const removeTableRow = (element) => {
+    element.closest("tr").remove();
+};
+
+/**
+ * Populates the edit modal with the data from a specific invoice.
+ * @param {object} invoice - The invoice object to populate the modal with.
+ */
+export const populateEditModal = (invoice) => {
+    document.getElementById("edit-invoice-id").value = invoice.id_invoice;
+    document.getElementById("edit-id_client").value = invoice.id_client;
+    document.getElementById("edit-invoice_number").value = invoice.invoice_number;
+    document.getElementById("edit-billing_period").value = invoice.billing_period;
+    document.getElementById("edit-billed_amount").value = invoice.billed_amount;
+    document.getElementById("edit-paid_amount").value = invoice.paid_amount;
+};
