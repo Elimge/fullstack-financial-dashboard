@@ -4,7 +4,7 @@
  * This module acts as a dedicated layer for all communication with the backend API.
  */
 
-const API_URL = "http://localhost:3000/api/v1";
+const API_URL = "http://localhost:3001/api/v1";
 
 /**
  * A generic wrapper around the fetch API to handle JSON responses and errors.

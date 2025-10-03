@@ -15,6 +15,7 @@ require("dotenv").config();
 const invoiceRoutes = require("./routes/invoice.routes.js");
 const clientRoutes = require("./routes/client.routes.js"); 
 const transactionRoutes = require("./routes/transaction.routes.js"); 
+const kpiRoutes = require("./routes/kpi.routes.js");
 
 // Create Express app instance
 const app = express(); 
@@ -57,6 +58,12 @@ app.use("/api/v1/clients", clientRoutes);
  * @route /api/v1/transactions
  */
 app.use("/api/v1/transactions", transactionRoutes);
+
+/**
+ * KPIs-related endpoints
+ * @route /api/v1/kpis
+ */
+app.use("/api/v1/kpis", kpiRoutes);
 
 // --- Start the server ---
 
