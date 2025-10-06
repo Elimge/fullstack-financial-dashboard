@@ -10,10 +10,23 @@ import * as ui from "./ui/ui.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     // --- DOM Element References ---
+    const monthlyIncomeCanvas = document.getElementById("monthlyIncomeChart");
     const addInvoiceForm = document.getElementById("add-invoice-form");
     const invoicesTableBody = document.getElementById("invoices-table-body");
     const editInvoiceModal = new bootstrap.Modal(document.getElementById("editInvoiceModal"));
     const saveEditButton = document.getElementById("save-edit-button");
+
+    /**
+     * @description Loads all dashboard charts and KPIs.
+     */
+    const loadDashboardData = async () => {
+        try {
+            const incomeData = await api.getMonthlyIncome();
+            ui.renderMonthlyIncomeChart(monthlyIncomeCanvas, incomeData);
+        } catch (error) {
+            console.error("Error loading dashboard data: ", error);
+        }
+    };
 
     /**
      * @description Fetches the initial list of invoices and renders them to the table.
@@ -104,4 +117,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Initial Load ---
     loadInvoices();
+    loadDashboardData();
 });

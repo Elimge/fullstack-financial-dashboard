@@ -58,6 +58,43 @@ export const removeTableRow = (element) => {
 };
 
 /**
+ * Renders a bar chart for monthly income.
+ * @param {HTMLCanvasElement} canvas - The canvas element to draw the chart on.
+ * @param {Array<object>} data - The data from the API (e.g., [{ month: '2024-06', total_income: 1000 }]).
+ */
+export const renderMonthlyIncomeChart = (canvas, data) => {
+    const ctx = canvas.getContext("2d");
+
+    // Extract labels (months) and values (income) from the data
+    const labels = data.map(item => item.month);
+    const values = data.map(item => item.total_income);
+
+    // Create the chart
+    new Chart(ctx, {
+        type: "bar", // Type of chart
+        data: {
+            labels,
+            datasets: [{
+                label: "Total Income",
+                data: values,
+                backgroundColor: "rgba(54, 162, 235, 0.6)", // Blue color with transparency
+                borderColor: "rgba(54, 162, 235, 1)",
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+};
+
+/**
  * Populates the edit modal with the data from a specific invoice.
  * @param {object} invoice - The invoice object to populate the modal with.
  */

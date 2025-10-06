@@ -52,3 +52,7 @@ export const updateInvoice = (id, invoiceData) => fetchJSON(`/invoices/${id}`, {
 export const deleteInvoice = (id) => fetchJSON(`/invoices/${id}`, {
     method: "DELETE"
 });
+
+// --- Public API Functions for KPIs ---
+
+export const getMonthlyIncome = () => fetchJSON("/kpis/monthly-income");
