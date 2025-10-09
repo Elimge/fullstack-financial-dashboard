@@ -21,7 +21,7 @@ const kpiRoutes = require("./routes/kpi.routes.js");
 const app = express(); 
 
 // The port the server will listen on
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3005; 
 
 // --- Middlewares ---
 // Enable Cross-Origin Resource Sharing (CORS)

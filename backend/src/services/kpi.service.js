@@ -23,6 +23,29 @@ const getMonthlyIncome = async () => {
     return rows;
 };
 
+/**
+ * @description Calculates the total income received from each payment platform.
+ * @returns {Promise<Array>} An array of objects, each with a platform name and the total amount.
+ */
+const getPaymentDistribution = async () => {
+    const [rows] = await pool.query(`
+        SELECT 
+            p.name AS platform_name,
+            SUM(t.amount) AS total_amount
+        FROM 
+            transactions t
+        JOIN
+            platforms p ON t.id_platform = p.id_platform
+        WHERE 
+            t.status = 'completed'
+        GROUP BY 
+            p.name
+        `); 
+        return rows;
+};
+
+// Export the service functions
 module.exports = {
-    getMonthlyIncome
+    getMonthlyIncome,
+    getPaymentDistribution
 };

@@ -95,6 +95,42 @@ export const renderMonthlyIncomeChart = (canvas, data) => {
 };
 
 /**
+ * Renders a pie chart for payment platform distribution.
+ * @param {HTMLCanvasElement} canvas - The canvas element to draw the chart on.
+ * @param {Array<object>} data - The data from the API (e.g., [{ payment_method: 'Nequi', total_amount: 1000 }]).
+ */
+export const renderPaymentDistributionChart = (canvas, data) => {
+    const ctx = canvas.getContext("2d");
+
+    const labels = data.map(item => item.platform_name);
+    const values = data.map(item => item.total_amount);
+
+    new Chart(ctx, {
+        type: "pie", // Type of chart
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Total Amount",
+                data: values,
+                backgroundColor: [
+                    "rgba(255, 99, 132, 0.6)",   // Red for the first platform
+                    "rgba(75, 192, 192, 0.6)", // Green for the second platform
+                ],
+                borderColor: [
+                    "rgba(255, 99, 132, 1)",
+                    "rgba(75, 192, 192, 1)",
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+};
+
+/**
  * Populates the edit modal with the data from a specific invoice.
  * @param {object} invoice - The invoice object to populate the modal with.
  */

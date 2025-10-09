@@ -8,4 +8,7 @@ const router = Router();
 // GET /api/v1/kpis/monthly-income
 router.get("/monthly-income", kpiController.listMonthlyIncome);
 
+// GET /api/v1/kpis/payment-distribution
+router.get("/payment-distribution", kpiController.listPaymentDistribution);
+
 module.exports = router;

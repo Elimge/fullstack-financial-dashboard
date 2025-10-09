@@ -130,8 +130,8 @@ The project is organized into two main directories: `backend` and `frontend`, cl
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repo-url>
-    cd <your-repo-folder>
+    git clone https://github.com/Elimge/fullstack-financial-dashboard.git
+    cd fullstack-financial-dashboard
     ```
 
 2.  **Setup the Backend:**

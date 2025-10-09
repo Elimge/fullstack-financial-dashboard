@@ -11,18 +11,26 @@ import * as ui from "./ui/ui.js";
 document.addEventListener("DOMContentLoaded", () => {
     // --- DOM Element References ---
     const monthlyIncomeCanvas = document.getElementById("monthlyIncomeChart");
+    const paymentDistributionCanvas = document.getElementById("paymentDistributionChart");
     const addInvoiceForm = document.getElementById("add-invoice-form");
     const invoicesTableBody = document.getElementById("invoices-table-body");
     const editInvoiceModal = new bootstrap.Modal(document.getElementById("editInvoiceModal"));
     const saveEditButton = document.getElementById("save-edit-button");
+
+    // --- Helper Functions ---
 
     /**
      * @description Loads all dashboard charts and KPIs.
      */
     const loadDashboardData = async () => {
         try {
+            // Load and render payment distribution chart
             const incomeData = await api.getMonthlyIncome();
             ui.renderMonthlyIncomeChart(monthlyIncomeCanvas, incomeData);
+
+            // Load and render payment distribution chart
+            const distributionData = await api.getPaymentDistribution();
+            ui.renderPaymentDistributionChart(paymentDistributionCanvas, distributionData);
         } catch (error) {
             console.error("Error loading dashboard data: ", error);
         }
