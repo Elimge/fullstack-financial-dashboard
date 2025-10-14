@@ -151,6 +151,29 @@ export const renderTopCustomersTable = (tableBody, customers) => {
 };
 
 /**
+ * Updates the main KPI cards on the dashboard.
+ * @param {object} kpiData - An object containing all the KPI data from the API.
+ */
+export const updateKpiCards = (kpiData) => {
+    // Delinquency Rate Card
+    if (kpiData.delinquencyData) {
+        document.getElementById("kpi-delinquency-rate").textContent = `${parseFloat(kpiData.delinquencyData.delinquency_rate).toFixed(2)}%`;
+    }
+
+    // Total Income Card (showing the most recent month)
+    if (kpiData.incomeData && kpiData.incomeData.length > 0) {
+        const lastMonthIncome = kpiData.incomeData[kpiData.incomeData.length - 1].total_income;
+        document.getElementById("kpi-total-income").textContent = parseFloat(lastMonthIncome).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    }
+
+    // Top Customer Card
+    if (kpiData.topCustomersData && kpiData.topCustomersData.length > 0) {
+        const topCustomer = kpiData.topCustomersData[0];
+        document.getElementById("kpi-top-customer").textContent = `${topCustomer.customer_name}`;
+    }
+};
+
+/**
  * Populates the edit modal with the data from a specific invoice.
  * @param {object} invoice - The invoice object to populate the modal with.
  */

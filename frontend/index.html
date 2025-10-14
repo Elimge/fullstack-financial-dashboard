@@ -21,6 +21,34 @@
     <div class="container mt-5">
         <h1 class="mb-4">Invoice Dashboard</h1>
 
+        <!-- KPI Cards Section -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-white bg-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">Delinquency Rate</h5>
+                        <p class="card-text fs-2 fw-bold" id="kpi-delinquency-rate">--%</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Income (This Month)</h5>
+                        <p class="card-text fs-2 fw-bold" id="kpi-total-income">$--</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-dark bg-warning">
+                    <div class="card-body">
+                        <h5 class="card-title">Top Customer (Total Paid)</h5>
+                        <p class="card-text fs-2 fw-bold" id="kpi-top-customer">--</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Form for adding new invoices -->
         <div class="card mb-4">
             <div class="card-header">
@@ -109,7 +137,7 @@
             </button>
             <button id="download-pdf-btn" class="btn btn-danger">
                 Download PDF Summary
-            </button>    
+            </button>
         </div>
 
         <!-- Table to display the list of invoices -->

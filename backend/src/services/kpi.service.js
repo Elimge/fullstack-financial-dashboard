@@ -66,9 +66,40 @@ const getTopCustomers = async () => {
     return rows;
 };
 
+/**
+ * @description Calculates the delinquency rate based on pending vs. total billed amounts.
+ * @returns {Promise<object>} An object containing the delinquency rate and underlying totals.
+ */
+const getDelinquencyRate = async () => {
+    const [rows] = await pool.query(`
+        SELECT
+            -- Sum of all billed amounts just if the invoice is not cancelled
+            SUM(CASE WHEN billed_amount > paid_amount THEN billed_amount ELSE 0 END) AS total_pending_billed,
+            -- Sum of all billed amounts
+            SUM(billed_amount) AS total_billed
+        FROM 
+            invoices;
+    `);
+
+    const stats = rows[0];
+    let delinquencyRate = 0;
+
+    // Ensure we don't divide by zero
+    if (stats.total_billed > 0) {
+        delinquencyRate = (stats.total_pending_billed / stats.total_billed) * 100;
+    }
+
+    return {
+        delinquency_rate: delinquencyRate,
+        total_pending_billed: stats.total_pending_billed,
+        total_billed: stats.total_billed
+    };
+};
+
 // Export the service functions
 module.exports = {
     getMonthlyIncome,
     getPaymentDistribution,
-    getTopCustomers
+    getTopCustomers,
+    getDelinquencyRate
 };

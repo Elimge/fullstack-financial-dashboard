@@ -57,6 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
             kpiData.incomeData = await api.getMonthlyIncome();
             kpiData.distributionData = await api.getPaymentDistribution();
             kpiData.topCustomersData = await api.getTopCustomers();
+            kpiData.delinquencyData = await api.getDelinquencyRate();
+
+            // Update KPI cards
+            ui.updateKpiCards(kpiData);
 
             // Render charts and tables
             ui.renderMonthlyIncomeChart(monthlyIncomeCanvas, kpiData.incomeData);

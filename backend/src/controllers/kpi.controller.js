@@ -38,9 +38,22 @@ const listTopCustomers = async (req, res) => {
     }
 };
 
+/**
+ * @description Controller to handle the request for delinquency rate KPI.
+ */
+const listDelinquencyRate = async (req, res) => {
+    try {
+        const rateData = await kpiService.getDelinquencyRate();
+        res.status(200).json(rateData);
+    } catch (error) {
+        res.status(500).json({ message: "Error getting delinquency rate data", error: error.message });
+    }
+};
+
 // Export the controller functions
 module.exports = {
     listMonthlyIncome,
     listPaymentDistribution,
-    listTopCustomers
+    listTopCustomers, 
+    listDelinquencyRate
 };

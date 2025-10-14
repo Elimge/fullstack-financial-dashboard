@@ -63,3 +63,5 @@ export const getPaymentDistribution = () => fetchJSON("/kpis/payment-distributio
 
 export const getTopCustomers = () => fetchJSON("/kpis/top-customers");
 
+export const getDelinquencyRate = () => fetchJSON("/kpis/delinquency-rate");
+
