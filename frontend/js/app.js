@@ -17,25 +17,52 @@ document.addEventListener("DOMContentLoaded", () => {
     const invoicesTableBody = document.getElementById("invoices-table-body");
     const editInvoiceModal = new bootstrap.Modal(document.getElementById("editInvoiceModal"));
     const saveEditButton = document.getElementById("save-edit-button");
+    const downloadReportBtn = document.getElementById("download-report-btn");
+    const downloadPdfBtn = document.getElementById("download-pdf-btn");
+
+    // Variable to hold KPI data for PDF generation
+    let kpiData = {};
 
     // --- Helper Functions ---
+
+    /**
+     * @description Generate insights text based on KPI data.
+     */
+    const generateInsightsText = (data) => {
+        const insights = {};
+
+        // Insight for Monthly Income
+        if (data.incomeData && data.incomeData.length > 2) {
+            const lastMonth = data.incomeData[data.incomeData.length - 1];
+            const prevMonth = data.incomeData[data.incomeData.length - 2];
+            const change = ((lastMonth.total - prevMonth.total) / prevMonth.total) * 100;
+            insights.incomeInsight = `Monthly income shows a  ${change.toFixed(2)}% change in ${lastMonth.month} compared to the previous month.`;
+        }
+
+        // Insight for Payment Distribution
+        if (data.distributionData && data.distributionData.length > 0) {
+            const topPlatform = data.distributionData.sort((a, b) => b.total_amount - a.total_amount)[0];
+            insights.distributionInsight = `The most used payment platform is ${topPlatform.platform_name}, processing a total of ${parseFloat(topPlatform.total_amount).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}.`;
+        }
+
+        return insights;
+    };
 
     /**
      * @description Loads all dashboard charts and KPIs.
      */
     const loadDashboardData = async () => {
         try {
-            // Load and render payment distribution chart
-            const incomeData = await api.getMonthlyIncome();
-            ui.renderMonthlyIncomeChart(monthlyIncomeCanvas, incomeData);
+            // Fetch all KPI data in parallel
+            kpiData.incomeData = await api.getMonthlyIncome();
+            kpiData.distributionData = await api.getPaymentDistribution();
+            kpiData.topCustomersData = await api.getTopCustomers();
 
-            // Load and render payment distribution chart
-            const distributionData = await api.getPaymentDistribution();
-            ui.renderPaymentDistributionChart(paymentDistributionCanvas, distributionData);
+            // Render charts and tables
+            ui.renderMonthlyIncomeChart(monthlyIncomeCanvas, kpiData.incomeData);
+            ui.renderPaymentDistributionChart(paymentDistributionCanvas, kpiData.distributionData);
+            ui.renderTopCustomersTable(topCustomersTableBody, kpiData.topCustomersData);
         
-            // Load and render top customers
-            const topCustomersData = await api.getTopCustomers();
-            ui.renderTopCustomersTable(topCustomersTableBody, topCustomersData);
         } catch (error) {
             console.error("Error loading dashboard data: ", error);
         }
@@ -127,6 +154,101 @@ document.addEventListener("DOMContentLoaded", () => {
             alert(`Error updating invoice: ${error.message}`);
         }
     });
+
+    // Handles the click on the "Download Pending Invoices Report" button.
+    downloadReportBtn.addEventListener("click", async () => {
+        try {
+            console.log("Fetching data for report...");
+            const data = await api.getPendingInvoicesReport();
+
+            if (data.length === 0) {
+                alert("No pending invoices to report.");
+                return;
+            }
+
+            console.log("Generating Excel file...");
+
+            // Create a new workbook and worksheet
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.json_to_sheet(data);
+
+            // Append the worksheet to the workbook
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Pending Invoices");
+
+            // Trigger the download
+            XLSX.writeFile(workbook, "Pending_Invoices_Report.xlsx");
+        } catch (error) {
+            console.error("Error generating report:", error);
+            alert("Could not generate the report.");
+        }
+    });
+
+    // Handles the click on the "Download PDF Summary" button.
+    downloadPdfBtn.addEventListener("click", async () => {
+        try {
+            console.log("Generating PDF summary...");
+
+            // Show a temporary loading state
+            downloadPdfBtn.disabled = true;
+            downloadPdfBtn.textContent = "Generating...";
+
+            // Import jsPDF and html2canvas
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            
+            // Add a title and date to the PDF
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(22);
+            pdf.text("Financial Summary Report", 105, 20, { align: 'center' });
+            
+            pdf.setFontSize(12);
+            pdf.setFont("helvetica", "normal");
+            pdf.text(`Report generated on: ${new Date().toLocaleDateString()}`, 105, 28, { align: 'center' });
+
+            // Generate insights text
+            const insights = generateInsightsText(kpiData);
+            let currentY = 45; // Starting Y position for insights
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(14);
+            pdf.text("Key Insights:", 15, currentY);
+            currentY += 8;
+
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(11);
+
+            // Add insights if they exist
+            if (insights.incomeInsight) {
+                pdf.text(`- ${insights.incomeInsight}`, 15, currentY, { maxWidth: 180 });
+                currentY += 12;
+            }
+            if (insights.distributionInsight) {
+                pdf.text(`- ${insights.distributionInsight}`, 15, currentY, { maxWidth: 180 });
+            }
+
+            // Add graph image using html2canvas
+            // Capture the dashboard section as a canvas
+            const dashboardSection = document.getElementById("dashboard-analytics-section");
+            const canvas = await html2canvas(dashboardSection);
+            const imgData = canvas.toDataURL('image/png');
+            
+            const imgWidth = 190;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            
+            // Add some spacing before the image
+            pdf.addImage(imgData, 'PNG', 10, currentY + 10, imgWidth, imgHeight);
+
+            pdf.save("Financial_Summary_Report.pdf");
+            
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            alert("Could not generate the PDF report.");
+        } finally {
+            // Restore button state
+            downloadPdfBtn.disabled = false;
+            downloadPdfBtn.textContent = "Download PDF Summary";
+        }
+    });   
 
     // --- Initial Load ---
     loadInvoices();
