@@ -26,8 +26,21 @@ const listPaymentDistribution = async (req, res) => {
     }
 };
 
+/**
+ * @description Controller to handle the request for top customers KPI. 
+ */
+const listTopCustomers = async (req, res) => {
+    try {
+        const topCustomers = await kpiService.getTopCustomers();
+        res.status(200).json(topCustomers);
+    } catch (error) {
+        res.status(500).json({ message: "Error getting top customers data", error: error.message });
+    }
+};
+
 // Export the controller functions
 module.exports = {
     listMonthlyIncome,
-    listPaymentDistribution
+    listPaymentDistribution,
+    listTopCustomers
 };

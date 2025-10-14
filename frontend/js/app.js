@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- DOM Element References ---
     const monthlyIncomeCanvas = document.getElementById("monthlyIncomeChart");
     const paymentDistributionCanvas = document.getElementById("paymentDistributionChart");
+    const topCustomersTableBody = document.getElementById("top-customers-table-body");
     const addInvoiceForm = document.getElementById("add-invoice-form");
     const invoicesTableBody = document.getElementById("invoices-table-body");
     const editInvoiceModal = new bootstrap.Modal(document.getElementById("editInvoiceModal"));
@@ -31,6 +32,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // Load and render payment distribution chart
             const distributionData = await api.getPaymentDistribution();
             ui.renderPaymentDistributionChart(paymentDistributionCanvas, distributionData);
+        
+            // Load and render top customers
+            const topCustomersData = await api.getTopCustomers();
+            ui.renderTopCustomersTable(topCustomersTableBody, topCustomersData);
         } catch (error) {
             console.error("Error loading dashboard data: ", error);
         }

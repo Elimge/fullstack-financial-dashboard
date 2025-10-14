@@ -11,4 +11,7 @@ router.get("/monthly-income", kpiController.listMonthlyIncome);
 // GET /api/v1/kpis/payment-distribution
 router.get("/payment-distribution", kpiController.listPaymentDistribution);
 
+// GET /api/v1/kpis/top-customers
+router.get("/top-customers", kpiController.listTopCustomers);
+
 module.exports = router;

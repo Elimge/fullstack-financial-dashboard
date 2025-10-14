@@ -51,8 +51,8 @@
         <!-- Card displaying the Monthly Income chart -->
         <div class="row mb-4">
             <!-- Monthly Income Chart -->
-            <div class="col-lg-8">
-                <div class="card">
+            <div class="col-lg-5">
+                <div class="card h-100">
                     <div class="card-header">
                         Monthly Income
                     </div>
@@ -62,13 +62,35 @@
                 </div>
             </div>
             <!-- Payment Distribution Chart -->
-            <div class="col-lg-4">
-                <div class="card">
+            <div class="col-lg-3">
+                <div class="card h-100">
                     <div class="card-header">
                         Payment Distribution
                     </div>
+                    <div class="card-body d-flex align-items-center justify-content-center">
+                        <canvas id="paymentDistributionChart" style="max-height: 250px;"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- Top Customers Table -->
+            <div class="col-lg-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Top 5 Customers by Payments
+                    </div>
                     <div class="card-body">
-                        <canvas id="paymentDistributionChart"></canvas>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Customer Name</th>
+                                    <th>Total Paid</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top-customers-table-body">
+                                <!-- Rows will be inserted here by JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

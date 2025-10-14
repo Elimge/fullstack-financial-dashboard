@@ -131,6 +131,26 @@ export const renderPaymentDistributionChart = (canvas, data) => {
 };
 
 /**
+ * Renders the top customers data into a table.
+ * @param {HTMLElement} tableBody - The tbody element to populate.
+ * @param {Array<object>} customers - The data from the API.
+ */
+export const renderTopCustomersTable = (tableBody, customers) => {
+    tableBody.innerHTML = ""; // Clear existing content
+
+    customers.forEach((customer, index) => {
+        const row = `
+            <tr>
+                <td class="align-middle"><strong>${index + 1}</strong></td>
+                <td class="align-middle">${customer.customer_name}</td>
+                <td class="align-middle text-end">${parseFloat(customer.total_paid).toLocaleString("en-US", { style: "currency", currency: "USD"})}</td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+};
+
+/**
  * Populates the edit modal with the data from a specific invoice.
  * @param {object} invoice - The invoice object to populate the modal with.
  */

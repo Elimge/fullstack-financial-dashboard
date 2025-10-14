@@ -56,5 +56,8 @@ export const deleteInvoice = (id) => fetchJSON(`/invoices/${id}`, {
 // --- Public API Functions for KPIs ---
 
 export const getMonthlyIncome = () => fetchJSON("/kpis/monthly-income");
+
 export const getPaymentDistribution = () => fetchJSON("/kpis/payment-distribution");
+
+export const getTopCustomers = () => fetchJSON("/kpis/top-customers");
 
