@@ -9,7 +9,13 @@ import * as api from "./services/api.js";
 import * as ui from "./ui/ui.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+    // --- STATE MANAGEMENT ---
+    let currentPage = 1;
+    const limit = 10; // Items per page
+
     // --- DOM Element References ---
+    const prevPageBtn = document.getElementById("prev-page-btn");
+    const nextPageBtn = document.getElementById("next-page-btn");
     const monthlyIncomeCanvas = document.getElementById("monthlyIncomeChart");
     const paymentDistributionCanvas = document.getElementById("paymentDistributionChart");
     const topCustomersTableBody = document.getElementById("top-customers-table-body");
@@ -77,8 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     const loadInvoices = async () => {
         try { 
-            const invoices = await api.getInvoices();
-            ui.renderInvoices(invoicesTableBody, invoices);
+            const response = await api.getInvoices(currentPage, limit);
+            ui.renderInvoices(invoicesTableBody, response.invoices);
+            ui.renderPaginationControls(response); // Render pagination
         } catch (error) {
             console.error("Error loading invoices:", error);
             alert("Could not load invoices.");
@@ -108,6 +115,21 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             alert(`Error creating invoice: ${error.message}`);
         }
+    });
+
+    // Pagination button event listeners
+    prevPageBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (currentPage > 1) {
+            currentPage--;
+            loadInvoices();
+        }
+    });
+
+    nextPageBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        currentPage++; // The API will handle out-of-bounds
+        loadInvoices();
     });
 
     // Uses event delegation to handle clicks on "Edit" and "Delete" buttons.

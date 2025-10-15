@@ -33,7 +33,7 @@ const fetchJSON = async (endpoint, options = {}) => {
 
 // --- Public API Functions for Invoices ---
 
-export const getInvoices = () => fetchJSON("/invoices");
+export const getInvoices = (page = 1, limit = 10) => fetchJSON(`/invoices?page=${page}&limit=${limit}`);
 
 export const getInvoiceById = (id) => fetchJSON(`/invoices/${id}`);
 

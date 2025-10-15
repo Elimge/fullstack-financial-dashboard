@@ -4,12 +4,28 @@
 const pool = require("../config/database.js");
 
 /**
- * @description Gets all invoices from the database.
- * @returns {Promise<Array>} A list of all invoices.
+ * @description Gets all invoices with pagination.
+ * @param {number} page - The current page number.
+ * @param {number} limit - The number of items per page.
+ * @returns {Promise<object>} An object containing the invoices for the page and total count.
  */
-const getAllInvoices = async () => {
-    const [rows] = await pool.query("SELECT * FROM invoices");
-    return rows;
+const getAllInvoices = async (page = 1, limit = 10) => {
+    // Calculate the offset for the SQL query
+    const offset = (page - 1) * limit;
+
+    // Query to get the total number of invoices
+    const [totalRows] = await pool.query("SELECT COUNT(*) as total FROM invoices");
+    const totalInvoices = totalRows[0].total;
+
+    // Query to get the invoices for the current page
+    const [rows] = await pool.query("SELECT * FROM invoices ORDER BY id_invoice DESC LIMIT ? OFFSET ?", [limit, offset]);
+    
+    return {
+        invoices: rows,
+        totalInvoices: totalInvoices,
+        totalPages: Math.ceil(totalInvoices / limit),
+        currentPage: page
+    };
 };
 
 /**

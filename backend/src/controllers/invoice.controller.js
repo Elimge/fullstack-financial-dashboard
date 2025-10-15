@@ -3,12 +3,16 @@
 const invoiceService = require("../services/invoice.service.js");
 
 /**
- * @description Controller to list all invoices.
+ * @description Controller to list all invoices with pagination.
  */
 const listInvoices = async (req, res) => {
     try {
-        const invoices = await invoiceService.getAllInvoices();
-        res.status(200).json(invoices);
+        // Get page and limit from query parameters, with default values
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        
+        const result = await invoiceService.getAllInvoices(page, limit);
+        res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ message: "Error listing invoices", error: error.message });
     }

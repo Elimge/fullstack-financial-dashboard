@@ -44,7 +44,7 @@ export const renderInvoices = (tableBody, invoices) => {
 export const updateTableRow = (invoice) => {
     const rowToUpdate = document.querySelector(`tr[data-row-id='${invoice.id}']`);
     if (rowToUpdate) {
-        // We reuse createInvoiceRow to ensure consistency
+        // Reuse createInvoiceRow to ensure consistency
         rowToUpdate.innerHTML = createInvoiceRow({ id_invoice: invoice.id, ...invoice });
     }
 };
@@ -170,6 +170,35 @@ export const updateKpiCards = (kpiData) => {
     if (kpiData.topCustomersData && kpiData.topCustomersData.length > 0) {
         const topCustomer = kpiData.topCustomersData[0];
         document.getElementById("kpi-top-customer").textContent = `${topCustomer.customer_name}`;
+    }
+};
+
+/**
+ * Updates the pagination controls UI.
+ * @param {object} paginationData - The pagination data from the API response.
+ */
+export const renderPaginationControls = (paginationData) => {
+    const { currentPage, totalPages } = paginationData;
+
+    const pageInfo = document.getElementById("page-info");
+    const prevPageItem = document.getElementById("prev-page-item");
+    const nextPageItem = document.getElementById("next-page-item");
+
+    // Update page info text
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+
+    // Enable/disable "Previous" button
+    if (currentPage === 1) {
+        prevPageItem.classList.add("disabled");
+    } else {
+        prevPageItem.classList.remove("disabled");
+    }
+
+    // Enable/disable "Next" button
+    if (currentPage === totalPages) {
+        nextPageItem.classList.add("disabled");
+    } else {
+        nextPageItem.classList.remove("disabled");
     }
 };
 
